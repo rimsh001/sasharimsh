@@ -1004,3 +1004,8 @@ blockquote {
     color: black;
   }
 }
+
+
+.contact-phone {
+  white-space: nowrap;
+}
