@@ -70,22 +70,14 @@
 
 
   // --- Cookie-баннер ---
-  const cookieKey = 'cookieConsentAccepted';
+  const cookieKey = 'cookie_consent';
 
-  function setCookieConsentAccepted() {
-    try {
-      localStorage.setItem(cookieKey, 'true');
-    } catch (error) {
-      // Игнорируем ошибки доступа к localStorage
-    }
+  function getCookieConsent() {
+    try { return localStorage.getItem(cookieKey); } catch (error) { return null; }
   }
 
-  function hasCookieConsentAccepted() {
-    try {
-      return localStorage.getItem(cookieKey) === 'true';
-    } catch (error) {
-      return false;
-    }
+  function setCookieConsent(value) {
+    try { localStorage.setItem(cookieKey, value); } catch (error) {}
   }
 
   function createCookieBanner() {
@@ -97,30 +89,32 @@
 
     banner.innerHTML = `
       <p class="cookie-banner__text">
-        Мы используем cookies для корректной работы сайта.
-        <a href="privacy.html" class="cookie-banner__link">Подробнее</a>
+        Мы используем cookie и сервисы аналитики, чтобы сайт работал корректно, анализировать посещаемость и улучшать материалы. Нажимая «Принять», вы соглашаетесь на обработку cookie в соответствии с <a href="cookies.html" class="cookie-banner__link">Политикой cookie</a>.
       </p>
-      <button type="button" class="cookie-banner__button">Понятно</button>
+      <div class="cookie-banner__actions">
+        <button type="button" class="cookie-banner__button" data-consent="accepted">Принять</button>
+        <button type="button" class="cookie-banner__button cookie-banner__button--ghost" data-consent="declined">Отклонить необязательные</button>
+        <a href="cookies.html" class="cookie-banner__button cookie-banner__button--link">Подробнее</a>
+      </div>
     `;
 
-    const acceptButton = banner.querySelector('.cookie-banner__button');
-    if (acceptButton) {
-      acceptButton.addEventListener('click', () => {
-        setCookieConsentAccepted();
+    banner.querySelectorAll('[data-consent]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setCookieConsent(btn.getAttribute('data-consent'));
         banner.classList.add('is-hidden');
         setTimeout(() => banner.remove(), 250);
       });
-    }
+    });
 
     document.body.appendChild(banner);
     requestAnimationFrame(() => banner.classList.add('is-visible'));
   }
 
-  if (!hasCookieConsentAccepted()) {
+  if (!getCookieConsent()) {
     createCookieBanner();
   }
 
-  // --- Текущий год в подвале ---
+// --- Текущий год в подвале ---
   const yearEl = document.getElementById('current-year');
   if (yearEl) {
     yearEl.textContent = new Date().getFullYear();
