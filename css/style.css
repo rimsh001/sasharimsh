@@ -687,7 +687,6 @@ blockquote {
 }
 
 .site-footer__bottom {
-  align-items: flex-start;
   padding-top: var(--space-md);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
@@ -696,15 +695,6 @@ blockquote {
   gap: var(--space-sm);
   font-size: 0.85rem;
   color: var(--color-text-muted);
-}
-
-
-.site-footer__legal-links {
-  line-height: 1.7;
-}
-
-.site-footer__legal-links a {
-  white-space: nowrap;
 }
 
 /* --- Текстовые страницы (article, about) --- */
@@ -1087,53 +1077,13 @@ blockquote {
   background: #fff;
 }
 
-.cookie-banner__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: flex-end;
-}
-
-.cookie-banner__button--ghost {
-  background: transparent;
-  color: #F4F1EB;
-}
-
-.cookie-banner__button--link {
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-}
-
 @media (max-width: 700px) {
   .cookie-banner {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .cookie-banner__actions {
-    width: 100%;
-  }
-
   .cookie-banner__button {
-    align-self: auto;
+    align-self: flex-end;
   }
-}
-
-.booking-form {
-  margin-top: 1rem;
-  display: grid;
-  gap: 0.75rem;
-}
-
-.booking-form__check {
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-  display: flex;
-  gap: 0.55rem;
-  align-items: flex-start;
-}
-
-.booking-form__check input {
-  margin-top: 0.2rem;
 }
