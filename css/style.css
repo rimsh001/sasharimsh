@@ -1009,3 +1009,81 @@ blockquote {
 .contact-phone {
   white-space: nowrap;
 }
+
+
+/* --- Cookie banner --- */
+.cookie-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%) translateY(20px);
+  width: min(680px, calc(100% - 2rem));
+  background: rgba(26, 22, 18, 0.96);
+  color: #F4F1EB;
+  border: 1px solid rgba(217, 210, 199, 0.35);
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  z-index: 300;
+  box-shadow: 0 12px 35px rgba(26, 22, 18, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.cookie-banner.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.cookie-banner.is-hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(14px);
+}
+
+.cookie-banner__text {
+  margin: 0;
+  color: #F4F1EB;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.cookie-banner__link {
+  color: #E8D5C8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cookie-banner__link:hover {
+  color: #ffffff;
+}
+
+.cookie-banner__button {
+  border: 1px solid rgba(244, 241, 235, 0.45);
+  background: #F4F1EB;
+  color: var(--color-text);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cookie-banner__button:hover {
+  background: #fff;
+}
+
+@media (max-width: 700px) {
+  .cookie-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cookie-banner__button {
+    align-self: flex-end;
+  }
+}

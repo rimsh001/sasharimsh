@@ -67,6 +67,59 @@
     });
   });
 
+
+
+  // --- Cookie-баннер ---
+  const cookieKey = 'cookieConsentAccepted';
+
+  function setCookieConsentAccepted() {
+    try {
+      localStorage.setItem(cookieKey, 'true');
+    } catch (error) {
+      // Игнорируем ошибки доступа к localStorage
+    }
+  }
+
+  function hasCookieConsentAccepted() {
+    try {
+      return localStorage.getItem(cookieKey) === 'true';
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function createCookieBanner() {
+    const banner = document.createElement('div');
+    banner.className = 'cookie-banner';
+    banner.setAttribute('role', 'dialog');
+    banner.setAttribute('aria-live', 'polite');
+    banner.setAttribute('aria-label', 'Уведомление об использовании cookies');
+
+    banner.innerHTML = `
+      <p class="cookie-banner__text">
+        Мы используем cookies для корректной работы сайта.
+        <a href="privacy.html" class="cookie-banner__link">Подробнее</a>
+      </p>
+      <button type="button" class="cookie-banner__button">Понятно</button>
+    `;
+
+    const acceptButton = banner.querySelector('.cookie-banner__button');
+    if (acceptButton) {
+      acceptButton.addEventListener('click', () => {
+        setCookieConsentAccepted();
+        banner.classList.add('is-hidden');
+        setTimeout(() => banner.remove(), 250);
+      });
+    }
+
+    document.body.appendChild(banner);
+    requestAnimationFrame(() => banner.classList.add('is-visible'));
+  }
+
+  if (!hasCookieConsentAccepted()) {
+    createCookieBanner();
+  }
+
   // --- Текущий год в подвале ---
   const yearEl = document.getElementById('current-year');
   if (yearEl) {
