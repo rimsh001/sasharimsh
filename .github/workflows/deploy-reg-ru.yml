@@ -1,0 +1,38 @@
+name: Deploy to REG.RU hosting
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: reg-ru-production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Upload static site to REG.RU
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.REG_RU_FTP_HOST }}
+          username: ${{ secrets.REG_RU_FTP_USERNAME }}
+          password: ${{ secrets.REG_RU_FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./
+          server-dir: ${{ secrets.REG_RU_SERVER_DIR || 'www/sasharimsh.ru/' }}
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            README.md
+            *.md
