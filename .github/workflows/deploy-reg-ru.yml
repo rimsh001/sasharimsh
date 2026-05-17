@@ -12,42 +12,27 @@ concurrency:
 
 jobs:
   deploy:
-    name: Upload static site to REG.RU via SFTP
+    name: Upload static site to REG.RU via FTP
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install lftp
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y lftp
-
-      - name: Deploy files via SFTP
-        env:
-          SFTP_HOST: ${{ secrets.REG_RU_SFTP_HOST }}
-          SFTP_USERNAME: ${{ secrets.REG_RU_SFTP_USERNAME }}
-          SFTP_PASSWORD: ${{ secrets.REG_RU_SFTP_PASSWORD }}
-          SFTP_PORT: ${{ secrets.REG_RU_SFTP_PORT || '22' }}
-          SERVER_DIR: ${{ secrets.REG_RU_SERVER_DIR || 'www/sasharimsh.ru/' }}
-        run: |
-          : "${SFTP_HOST:?Missing secret REG_RU_SFTP_HOST}"
-          : "${SFTP_USERNAME:?Missing secret REG_RU_SFTP_USERNAME}"
-          : "${SFTP_PASSWORD:?Missing secret REG_RU_SFTP_PASSWORD}"
-          : "${SFTP_PORT:?Missing secret REG_RU_SFTP_PORT}"
-          : "${SERVER_DIR:?Missing secret REG_RU_SERVER_DIR}"
-
-          lftp -u "$SFTP_USERNAME","$SFTP_PASSWORD" -p "$SFTP_PORT" "sftp://$SFTP_HOST" <<EOF
-          set cmd:fail-exit yes
-          set sftp:auto-confirm yes
-          mirror -R --verbose \
-            --exclude-glob .git/ \
-            --exclude-glob .git/** \
-            --exclude-glob .github/ \
-            --exclude-glob .github/** \
-            --exclude-glob README.md \
-            --exclude-glob "*.md" \
-            ./ "$SERVER_DIR"
-          bye
-          EOF
+      - name: Deploy files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.REG_RU_FTP_HOST }}
+          username: ${{ secrets.REG_RU_FTP_USERNAME }}
+          password: ${{ secrets.REG_RU_FTP_PASSWORD }}
+          protocol: ftp
+          port: ${{ secrets.REG_RU_FTP_PORT || 21 }}
+          local-dir: ./
+          server-dir: ${{ secrets.REG_RU_SERVER_DIR || 'www/sasharimsh.ru/' }}
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            README.md
+            *.md
