@@ -28,7 +28,9 @@ jobs:
           protocol: ftp
           port: ${{ secrets.REG_RU_FTP_PORT || 21 }}
           local-dir: ./
-          server-dir: ${{ secrets.REG_RU_SERVER_DIR || 'www/sasharimsh.ru/' }}
+          # FTP account on REG.RU already opens inside the domain folder,
+          # so deploy directly to the current remote directory.
+          server-dir: ./
           dangerous-clean-slate: false
           exclude: |
             **/.git*
